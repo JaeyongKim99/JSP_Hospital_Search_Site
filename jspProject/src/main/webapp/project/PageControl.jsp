@@ -183,7 +183,7 @@ else if ("insert".equals(action)) {
 		//헤더부분에 이름을 보내주기 위해 로그인할때 이름을 가져와 세션에 선언한다.
 		String name = hud.getNameDB(id);
 		session.setAttribute("memName", name);
-		pageContext.forward("hospitalReserve.jsp");
+		pageContext.forward("HospitalReserve.jsp");
 	}
 
 	else if (result == 0) {

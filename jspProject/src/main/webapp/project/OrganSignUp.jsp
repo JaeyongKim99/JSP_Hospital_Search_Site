@@ -104,7 +104,7 @@ function sample6_execDaumPostcode() {
                     <span class="text-dark h4">기업</span> <span class="text-primary h4">회원가입</span>
                 </a>
             </div>
-            <form id="hospitalSignUp" method="get" action="page_control.jsp" onsubmit="onSubmit()">
+            <form id="hospitalSignUp" method="get" action="PageControl.jsp" onsubmit="onSubmit()">
                 <div class="form-group">
                        <label for="userId" class="form-label mt-4">아이디</label>
                     <input type="text" class="form-control" name="id" id="userId" aria-describedby="emailHelp" placeholder="아이디를 입력해주세요." required>

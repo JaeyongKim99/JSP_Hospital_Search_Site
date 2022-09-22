@@ -26,7 +26,7 @@
       </ul>
        <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="patientLogin.jsp"><h5><strong>로그인</strong></h5></a>
+          <a class="nav-link" href="PatientLogin.jsp"><h5><strong>로그인</strong></h5></a>
         </li>
         <li class="nav-item" style="margin-right: 80px">
           <a class="nav-link" href="PatientSignUp.jsp"><h5><strong>회원가입</strong></h5></a>

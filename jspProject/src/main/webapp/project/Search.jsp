@@ -304,7 +304,7 @@ private static String[] getHosInfo(String HospitalId) {
   				PrintWriter pw = response.getWriter();
   				pw.println("<script>");
   				pw.println("alert('로그인을 해주세요.')");
-  				pw.println("location.href='patientLogin.jsp;'");
+  				pw.println("location.href='PatientLogin.jsp;'");
   				pw.println("</script>");
   				pw.close();
   				return;
@@ -395,8 +395,7 @@ private static String[] getHosInfo(String HospitalId) {
 					        '<div class="iw_inner" style="padding: 1em;">',
 					        '   <h3 style="font-weight:bold;">'+ hosName + '</h3><hr>',
 					        '   <p>'+addr+'<hr>',
-					        '       '+depertment+'<hr>',
-					        '       '+safeCaster(postCdn),
+					        '       '+depertment,
 					        '   </p>',
 					        '</div>'
 					    ].join('');
@@ -431,25 +430,6 @@ private static String[] getHosInfo(String HospitalId) {
 						        infowindow.open(map, marker);
 						    }
 						})
-					    function safeCaster(zipCd) {
-						 	var covid_s;
-						 	const settings = {
-								  "async": false,
-								  "crossDomain": true,
-								  "url": "https://apis.openapi.sk.com/safecaster/v1/search/safetyindex/zip/all/current?zipCd="+zipCd,
-								  "method": "GET",
-								  "headers": {
-								    "Accept": "application/json",
-								    "appKey": "l7xx79683cf414a545569641ba1a093daf8a"
-								  }
-							};
-
-							$.ajax(settings).done(function (response) {
-								 covid_s = response.data[0].contactDensityPercentile
-								 console.log(covid_s);
-							});
-							return Math.round(covid_s);
-						} 
 					};
 				
 				</script>
@@ -468,7 +448,7 @@ private static String[] getHosInfo(String HospitalId) {
         <h5 class="modal-title" id="exampleModalLabel">병원이름</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form action="page_control.jsp" method="get">
+      <form action="PageControl.jsp" method="get">
       <input type=hidden id = "IdHospital" name = "IdHospital" value ="id 가져오기 실패" >	
 	  <input type=hidden id = "Idpatient" name = "Idpatient" value = "<%= id %>" >
       <div class="modal-body">

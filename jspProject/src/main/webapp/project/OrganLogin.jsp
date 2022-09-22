@@ -54,7 +54,7 @@
                 <span class="text-dark h3">병원</span> <span class="text-primary h3">로그인</span>
             </a>
     </div>
-	<form method="post" action="page_control.jsp" style="padding-top: 30px;">
+	<form method="post" action="PageControl.jsp" style="padding-top: 30px;">
 		<div class="form-floating" style="padding-bottom: 10px;">
       		<input type="id" class="form-control" id="floatingInput" placeholder="id" name="id"  value= <%=idStr %>>
       		<label for="floatingInput">아이디</label>
