@@ -1,8 +1,6 @@
-# JSP_Hospital_Search_Site
+# 메디닥
 
 ## 👩‍🏫PROJECT 소개
-
-# 메디닥
 
 **기획의도**
 
