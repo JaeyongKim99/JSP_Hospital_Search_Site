@@ -42,7 +42,7 @@
 %>
 <section class="container" style="max-width: 560px; padding-top: 20px; height: 500px;">
 	<div class="row" style="padding-bottom: 20px;">
-            <a class="navbar-brand text-left col-md-3 patientSignUp" href="patientLogin.jsp">	
+            <a class="navbar-brand text-left col-md-3 patientSignUp" href="PatientLogin.jsp">	
                 <span class="text-dark h4" style="font-size:15px;">개인 로그인</span>
             </a>
             <a class="navbar-brand text-left col-md-3 hospitalSignUp" href="OrganLogin.jsp">	

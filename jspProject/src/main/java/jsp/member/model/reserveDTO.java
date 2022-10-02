@@ -8,13 +8,14 @@ public class reserveDTO {
 	private String registrationBackNumber; // 주민번호 뒷자리
 	private String symptom; // 증상
 	private String reserveDate; //예약날짜
-	private String Namepatient; //환자 이름
+	private String namepatient; //환자 이름
+	
 	
 	public String getNamepatient() {
-		return Namepatient;
+		return namepatient;
 	}
 	public void setNamepatient(String namepatient) {
-		Namepatient = namepatient;
+		this.namepatient = namepatient;
 	}
 	public String getReserveDate() {
 		return reserveDate;

@@ -91,7 +91,7 @@ public class reserveDAO {
 					reserveDTO.setRegistrationBackNumber(rs.getString("registrationBackNumber"));
 					reserveDTO.setSymptom(rs.getString("symptom"));
 					reserveDTO.setReserveDate(rs.getString("reserveDate"));
-					reserveDTO.setNamepatient(rs.getString("Namepatient"));
+					reserveDTO.setNamepatient(rs.getString("namepatient"));
 					datas.add(reserveDTO);
 				}
 				rs.close();
@@ -102,5 +102,25 @@ public class reserveDAO {
 				disconnect();
 			}
 			return datas;
+		}
+		// 특정 예약 삭제 메소드
+		public boolean deleteDB(String[]  id) {
+			connect();
+			
+			String sql ="delete from reserve where IdHospital=? and Idpatient=?";
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, id[0]);
+				pstmt.setString(2, id[1]);
+				System.out.println(pstmt);
+				pstmt.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return false;
+			}
+			finally {
+				disconnect();
+			}
+			return true;
 		}
 }

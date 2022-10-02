@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
- <%@ page import="jsp.member.model.*, java.util.*" %>
-<%request.setCharacterEncoding("utf-8"); %>
+<%@ page import="jsp.member.model.*, java.util.*" %>
+<% request.setCharacterEncoding("utf-8"); %>
 <%@ page import="java.io.*, java.util.regex.Matcher, java.util.regex.Pattern"%>
 <jsp:useBean id="pud" class="jsp.member.model.patientuserDAO" />
 <jsp:useBean id="addrmember" class="jsp.member.model.patientuserDTO" />
@@ -14,6 +14,7 @@
 <jsp:setProperty name="addrrd" property="*" />
 <jsp:setProperty property="idHospital" name="addrrd" value="<%=request.getParameter(\"IdHospital\")%>"/>
 <jsp:setProperty property="idpatient" name="addrrd" value="<%=request.getParameter(\"Idpatient\")%>"/>
+<jsp:setProperty property="namepatient" name="addrrd" value="<%=request.getParameter(\"namepatient\")%>"/>
 <%
 String action = request.getParameter("action"); // 개인 회원 열람 컨트롤러
 String hosAction = request.getParameter("hosAction"); // 기업 회원 열람 컨트롤러
@@ -266,6 +267,15 @@ else if ("insert".equals(hosAction)) {
 		throw new Exception("DB 입력오류");
 }
 
+// 예약 조회
+else if("search".equals(hosAction)){
+	String id = null;
+	id = (String)session.getAttribute("hosMemId");
+	ArrayList<reserveDTO> datas = rd.getDBList(hud.getHosIdDB(id));
+	request.setAttribute("datas", datas);
+	pageContext.forward("HospitalReserve.jsp");
+}
+
 //예약 등록
 if ("insert".equals(rdAction)) {
 	String IdHospital = null; //병원 아이디
@@ -275,7 +285,7 @@ if ("insert".equals(rdAction)) {
 	String registrationBackNumber = null; // 주민번호 뒷자리
 	String symptom = null; // 증상
 	String reserveDate = null; //예약날짜
-	String Namepatient = null; //환자이름
+	String namepatient = null; //환자이름
 	
 	if (request.getParameter("IdHospital") != null) {
 		IdHospital = request.getParameter("IdHospital");
@@ -298,12 +308,13 @@ if ("insert".equals(rdAction)) {
 	if (request.getParameter("reserveDate") != null) {
 		reserveDate = request.getParameter("reserveDate");
 	}
-	if (request.getParameter("Namepatient") != null) {
-		Namepatient = request.getParameter("Namepatient");
+	if (request.getParameter("namepatient") != null) {
+		namepatient = request.getParameter("namepatient");
 	}
+	System.out.println(namepatient);
 	
 	// null값이 있는지 확인
-	if (IdHospital == null || Idpatient == null || department == null || reserveDiv == null || registrationBackNumber == null || symptom == null || reserveDate == null || Namepatient == null)
+	if (IdHospital == null || Idpatient == null || department == null || reserveDiv == null || registrationBackNumber == null || symptom == null || reserveDate == null || namepatient == null)
 	{
 		PrintWriter pw = response.getWriter();
 		pw.println("<script>");
@@ -313,7 +324,6 @@ if ("insert".equals(rdAction)) {
 		pw.close();
 		return;
 	}
-
 	// 오류를 감지하기 위해 result변수에 담음
 	int result = rd.insertDB(addrrd);
 	if (result > 0) {
@@ -330,6 +340,43 @@ if ("insert".equals(rdAction)) {
 		return;
 	} else
 		throw new Exception("DB 입력오류");
+}
+//예약 삭제
+else if ("delete".equals(rdAction)){
+	String hosUserId = (String)session.getAttribute("hosMemId");
+	String hosId = null;
+	String patId = null;
+	String[] id = new String[2];
+	
+	hosId = hud.getHosIdDB(hosUserId);
+	
+	if (request.getParameter("Idpatient") != null) {
+		patId = request.getParameter("Idpatient");
+	}
+	
+	// null값이 있는지 확인
+	if (hosId == null || patId == null)
+	{
+		PrintWriter pw = response.getWriter();
+		pw.println("<script>");
+		pw.println("alert('ID값을 가져오는데 실패했습니다.')");
+		pw.println("history.back();");
+		pw.println("</script>");
+		pw.close();
+		return;
+	}
+	
+	//DAO에 보내기 위해 문자 배열에 ID 값을 넣어준다.
+	id[0] = hosId;
+	id[1] = patId;
+	
+	System.out.println(id[0]);
+	System.out.println(id[1]);
+	
+	if (rd.deleteDB(id)) {
+		response.sendRedirect("PageControl.jsp?hosAction=search");
+	} else
+		throw new Exception("DB 삭제 오류");
 }
 
 %>
