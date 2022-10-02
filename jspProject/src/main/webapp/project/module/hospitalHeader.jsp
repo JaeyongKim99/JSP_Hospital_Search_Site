@@ -12,7 +12,7 @@
 %>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="HospitalReserve.jsp" style="margin-right: 40px"><img src="img/logo.png" class="img-responsive" alt="로고" width="100px" height="80px"></a>
+    <a class="navbar-brand" href="PageControl.jsp?hosAction=search" style="margin-right: 40px"><img src="img/logo.png" class="img-responsive" alt="로고" width="100px" height="80px"></a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item ml">
@@ -22,7 +22,7 @@
           <a class="nav-link" href="#"><h5><strong>이용안내</strong></h5></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="Index.jsp"><h5><strong>예약현황</strong></h5></a>
+          <a class="nav-link" href="PageControl.jsp?hosAction=search"><h5><strong>예약현황</strong></h5></a>
         </li>
       </ul>
        <ul class="nav navbar-nav ml-auto mb-2 mb-lg-0">

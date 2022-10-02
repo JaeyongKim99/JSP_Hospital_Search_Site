@@ -658,7 +658,7 @@ private static String[] getHosInfo(String HospitalId) {
 					</tr>
 				</tbody>
 			</table>
-			<input type=hidden name="Namepatient" value="<%= name %>">
+			<input type=hidden name="namepatient" value="<%= name %>">
 			<input type=hidden name="rdAction" value="insert">
 		</div>
 	</div> 
