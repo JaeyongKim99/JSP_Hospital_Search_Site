@@ -50,3 +50,12 @@ body{
 	color: black;
 }
 
+/*마이페이지 개인정보 관리 비밀번호 보이기 토글*/
+#passwordCheck{
+	position: relative;
+}
+#passwordCheck i{
+	position: absolute;
+    left: 85%;
+    top: 18px;
+}
