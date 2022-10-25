@@ -117,9 +117,12 @@ function clickBtn(){
 <%
 	String name = null; //로그인 정보에 따라 해당 계정의 이름 정보를 담는 변수
 	name = (String)session.getAttribute("memName");
+	List<Map> pubList = new ArrayList();
+	pubList = (ArrayList)request.getAttribute("pubList");
 %>
 <body>
-<%
+<%--
+	long start = System.currentTimeMillis();
 	List<Map> pubList = new ArrayList();
 	try{
 		request.setCharacterEncoding("UTF-8");
@@ -177,7 +180,9 @@ function clickBtn(){
 	catch(Exception e){
 		e.printStackTrace();
 	}
-%>
+	 long end = System.currentTimeMillis();
+     System.out.println("수행시간: " + (end - start) / 1000 + " s");
+--%>
 <%! 
 private static String getValue(String tag, Element element) {
     NodeList nodes = element.getElementsByTagName(tag).item(0).getChildNodes();
@@ -312,7 +317,7 @@ private static String[] getHosInfo(String HospitalId) {
  %>
 	<div class="container">
  		<div>
-			<form class="row" action="Search.jsp" method="post" id="searchBar">
+			<form class="row" action="PageControl.jsp" method="post" id="searchBar">
 				<div class="btn-group py-3 col-md-3" role="group"
 				aria-label="Basic outlined example">
 					<input type="radio" class="btn-check" name="search" value="hosname" id="btnradio1" autocomplete="off" checked>
@@ -329,6 +334,7 @@ private static String[] getHosInfo(String HospitalId) {
 						</button>
 						<input type="hidden" name="lat" value="s">
 						<input type="hidden" name="lng" value="s">
+						<input type="hidden" name="hoslAction" value="search">
 					</div>
 				</div>
 			</form>
@@ -395,7 +401,8 @@ private static String[] getHosInfo(String HospitalId) {
 					        '<div class="iw_inner" style="padding: 1em;">',
 					        '   <h3 style="font-weight:bold;">'+ hosName + '</h3><hr>',
 					        '   <p>'+addr+'<hr>',
-					        '       '+depertment,
+					        '       '+depertment+'<hr>',
+					        '       '+covidStat(hosName.substr(0, 2)),
 					        '   </p>',
 					        '</div>'
 					    ].join('');
@@ -430,6 +437,23 @@ private static String[] getHosInfo(String HospitalId) {
 						        infowindow.open(map, marker);
 						    }
 						})
+						function covidStat(hosName) {
+						 	var covid_s;
+						 	const settings = {
+								  "async": false,
+								  "crossDomain": true,
+								  "url": "https://api.corona-19.kr/korea/country/new/?serviceKey=aFyobOp2lNAIsBTr8c4x1Ue5RMq6iDnZH",
+								  "method": "GET",
+								  "headers": {
+								    "Accept": "application/json"
+								  }
+							};
+
+							$.ajax(settings).done(function (response) {
+								 console.log(response);
+							});
+							return Math.round(covid_s);
+						} 
 					};
 				
 				</script>
@@ -659,6 +683,7 @@ private static String[] getHosInfo(String HospitalId) {
 				</tbody>
 			</table>
 			<input type=hidden name="namepatient" value="<%= name %>">
+			<input type="hidden" id="namehospital" name="namehospital" value="병원이름">
 			<input type=hidden name="rdAction" value="insert">
 		</div>
 	</div> 
@@ -676,6 +701,7 @@ function transParam(dutyName, dgidIdName, hpid){ // 병원정보를 모달창으
 	var arr = dgidIdName.split(',');
 	$("#IdHospital").val(hpid);
 	$("#hospitalName").val(dutyName);
+	$("#namehospital").val(dutyName);
 	$("#exampleModalLabel").text(dutyName);
 	$('#department').empty();
 	for(var count = 0; count < arr.length; count++){                
