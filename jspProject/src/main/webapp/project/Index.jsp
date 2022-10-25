@@ -92,7 +92,7 @@ function clickBtn(){
   	%>
 	<div class="container">
  		<div>
-			<form class="row" action="Search.jsp" method="post" id="searchBar">
+			<form class="row" action="PageControl.jsp" method="post" id="searchBar">
 				<div class="btn-group py-3 col-md-3" role="group"
 				aria-label="Basic outlined example">
 					<input type="radio" class="btn-check" name="search" value="hosname" id="btnradio1" autocomplete="off" checked>
@@ -109,6 +109,7 @@ function clickBtn(){
 						</button>
 						<input type="hidden" name="lat" value="s">
 						<input type="hidden" name="lng" value="s">
+						<input type="hidden" name="hoslAction" value="search">
 					</div>
 				</div>
 			</form>

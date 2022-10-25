@@ -121,171 +121,6 @@ function clickBtn(){
 	pubList = (ArrayList)request.getAttribute("pubList");
 %>
 <body>
-<%--
-	long start = System.currentTimeMillis();
-	List<Map> pubList = new ArrayList();
-	try{
-		request.setCharacterEncoding("UTF-8");
-		String search = request.getParameter("search"); //검색 분류(병원명, 진료과)
-		String keyword = request.getParameter("keyword");// 검색어
-		String lat = request.getParameter("lat");//위도
-		String lng = request.getParameter("lng");//경도
-		//System.out.println(lat + " , " + lng); //경도 위도 출력
-		String location = getLocation(lat, lng);
-		// XML 문서 파싱
-		 String xml = location;// String으로 만든 xml 파일을 가져옴
-		 InputSource is = new InputSource(new StringReader(xml));
-		 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		 DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-		 Document document = documentBuilder.parse(is);
-		 document.getDocumentElement().normalize();
-		 System.out.println("파일출력");
-		// 읽어들인 파일 불러오기
-         NodeList nodes = document.getElementsByTagName("item");
-         for (int k = 0; k < nodes.getLength(); k++) {
-             Node node = nodes.item(k);
-             if (node.getNodeType() == Node.ELEMENT_NODE) {
-                 Element element = (Element) node;
-                 if(!(Float.parseFloat(getValue("distance", element)) < 1.0)){
-                	 continue;
-                 } // 현재 위치에서 1키로 이내에 있는 병원만 검색
-                 String[] basicList = getHosInfo(getValue("hpid", element));
-                 if(search.equals("hosname")){ // 검색 분류에 따라 다르게 검색
-                	 if(!(getValue("dutyName", element).contains(keyword))){
-                    	 continue;
-                     } // 병원명으로 검색
-                 }else if(search.equals("department")){
-                	 if(!(basicList[0]).contains(keyword)){
-                    	 continue;
-                     } // 진료과로 검색
-                 }
-                 Map<String, String> pub = new HashMap();
-             	 pub.put("dutyName", getValue("dutyName", element));
-             	 pub.put("dutyTel1", getValue("dutyTel1", element));
-             	 pub.put("dgidIdName", basicList[0]);
-             	 pub.put("postCdn", basicList[1] + basicList[2]);
-             	 pub.put("hpid", getValue("hpid", element));
-             	 pub.put("dutyAddr", basicList[3]);
-             	 pub.put("wgs84Lon", basicList[4]);
-             	 pub.put("wgs84Lat", basicList[5]);
-             	pubList.add(pub);
-             }
-         }
-         for(Map pub : pubList){
-        	 System.out.println(pub.get("dutyName"));
-        	 System.out.println(pub.get("dutyTel1"));
-        	 System.out.println(pub.get("dgidIdName"));
-         }
-	}
-	catch(Exception e){
-		e.printStackTrace();
-	}
-	 long end = System.currentTimeMillis();
-     System.out.println("수행시간: " + (end - start) / 1000 + " s");
---%>
-<%! 
-private static String getValue(String tag, Element element) {
-    NodeList nodes = element.getElementsByTagName(tag).item(0).getChildNodes();
-    Node node = (Node) nodes.item(0);
-    return node.getNodeValue();
-}
-%>
-<%!//병‧의원 위치정보 조회 함수
-private static String getLocation(String lat, String lng) {
-	String location = "";
-	try{
-		StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B552657/HsptlAsembySearchService/getHsptlMdcncLcinfoInqire"); /*URL*/
-		 urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=x54Q8qIcHnEvwPqRil6XXkjUp2H9AzWuMgC8onIYs1CyUpBTOfUo7fYH540P3kHb0dUUgt%2FQEAo%2B1BfEWmKTsw%3D%3D"); /*Service Key*/
-		 urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
-		 urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("1000", "UTF-8")); /*한 페이지 결과 수*/
-		 urlBuilder.append("&" + URLEncoder.encode("WGS84_LON","UTF-8") + "=" + URLEncoder.encode(lng, "UTF-8")); /*병원경도*/
-		 urlBuilder.append("&" + URLEncoder.encode("WGS84_LAT","UTF-8") + "=" + URLEncoder.encode(lat, "UTF-8")); /*병원위도*/
-		 URL url = new URL(urlBuilder.toString());
-		 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		 conn.setRequestMethod("GET");
-		 conn.setRequestProperty("Content-type", "application/json");
-		 System.out.println("Response code: " + conn.getResponseCode());
-		 BufferedReader rd;
-		 if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-		     rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-		 } else {
-		     rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-		 }
-		 StringBuilder sb = new StringBuilder();
-		 String line;
-		 while ((line = rd.readLine()) != null) {
-		     sb.append(line);
-		 }
-		 rd.close();
-		 conn.disconnect();	
-		 location = sb.toString();
-		 
-	}catch(Exception e){
-		e.printStackTrace();
-	}
-	return location;
-}
-%>
-
-<%!//병‧의원별 기본정보 조회 함수(1이 들어오면 진료과 출력, 2가 들어오면 우편번호 출력)
-private static String[] getHosInfo(String HospitalId) {
-	String Info = "";
-	String postCdn1 = "";
-	String postCdn2 = "";
-	String dutyAddr = "";
-	String wgs84Lon = "";
-	String wgs84Lat = "";
-	try{
-		StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B552657/HsptlAsembySearchService/getHsptlBassInfoInqire"); /*URL*/
-        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=x54Q8qIcHnEvwPqRil6XXkjUp2H9AzWuMgC8onIYs1CyUpBTOfUo7fYH540P3kHb0dUUgt%2FQEAo%2B1BfEWmKTsw%3D%3D"); /*Service Key*/
-        urlBuilder.append("&" + URLEncoder.encode("HPID","UTF-8") + "=" + URLEncoder.encode(HospitalId, "UTF-8")); /*기관ID*/
-        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지 번호*/
-        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("80", "UTF-8")); /*목록 건수*/
-        URL url = new URL(urlBuilder.toString());
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Content-type", "application/json");
-        BufferedReader rd;
-        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
-            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        } else {
-            rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-        }
-        StringBuilder sb = new StringBuilder();
-        String line;
-        while ((line = rd.readLine()) != null) {
-            sb.append(line);
-        }
-        rd.close();
-        conn.disconnect();
-        
-    	 // XML 문서 파싱
-     	String xml = sb.toString();// String으로 만든 xml 파일을 가져옴
-     	InputSource is = new InputSource(new StringReader(xml));
-     	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-     	DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-     	Document document = documentBuilder.parse(is);
-     	document.getDocumentElement().normalize();
-    	// 읽어들인 파일 불러오기
-     	NodeList nodes = document.getElementsByTagName("item");
-     	Node node = nodes.item(0);
-        if (node.getNodeType() == Node.ELEMENT_NODE) {
-            Element element = (Element) node;
-            Info = getValue("dgidIdName", element).toString();
-            postCdn1 = getValue("postCdn1", element).toString();
-            postCdn2 = getValue("postCdn2", element).toString();
-            dutyAddr = getValue("dutyAddr", element).toString();
-            wgs84Lon = getValue("wgs84Lon", element).toString();
-            wgs84Lat = getValue("wgs84Lat", element).toString();
-        }
-	}catch(Exception e){
-		e.printStackTrace();
-	}
-	return new String[] {Info, postCdn1, postCdn2, dutyAddr, wgs84Lon, wgs84Lat};
-	
-	
-}
-%>
 <% 
   			String memLogin = null; // 로그인 여부에 따라 탑메뉴 보여주는 로직
   			memLogin = (String)session.getAttribute("memLogin");
@@ -402,7 +237,7 @@ private static String[] getHosInfo(String HospitalId) {
 					        '   <h3 style="font-weight:bold;">'+ hosName + '</h3><hr>',
 					        '   <p>'+addr+'<hr>',
 					        '       '+depertment+'<hr>',
-					        '       '+covidStat(hosName.substr(0, 2)),
+					        '       '+covidStat(addr.substr(0, 2)),
 					        '   </p>',
 					        '</div>'
 					    ].join('');
@@ -437,7 +272,7 @@ private static String[] getHosInfo(String HospitalId) {
 						        infowindow.open(map, marker);
 						    }
 						})
-						function covidStat(hosName) {
+						function covidStat(addr) {
 						 	var covid_s;
 						 	const settings = {
 								  "async": false,
@@ -450,9 +285,13 @@ private static String[] getHosInfo(String HospitalId) {
 							};
 
 							$.ajax(settings).done(function (response) {
-								 console.log(response);
+								for (var i = 3; i < Object.keys(response).length; i++){
+									if(addr === response[Object.keys(response)[i]].countryName){
+										covid_s = "오늘 " + response[Object.keys(response)[i]].countryName + " 지역의 코로나 확진자 수: " + response[Object.keys(response)[i]].newCase + "명";
+									} 
+								}
 							});
-							return Math.round(covid_s);
+							return covid_s;
 						} 
 					};
 				
