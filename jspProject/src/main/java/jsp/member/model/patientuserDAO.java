@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 public class patientuserDAO {
 	Connection conn = null;
 	PreparedStatement pstmt = null;
@@ -111,5 +112,53 @@ public class patientuserDAO {
 				disconnect();
 			}
 			return name;
+		}
+		// 특정 회원 개인정보 출력 메소드
+		public patientuserDTO getDBList(String id) {
+			connect();
+			String sql = "select * from patientuser where Id=?";
+			patientuserDTO data = new patientuserDTO();
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1,id);
+				System.out.println(pstmt);
+				ResultSet rs = pstmt.executeQuery();
+				
+				rs.next();
+				data.setId(rs.getString("Id"));
+				data.setPassword(rs.getString("password"));
+				data.setName(rs.getString("name"));
+				data.setBirthdate(rs.getInt("birthdate"));
+				data.setSex(rs.getString("sex"));
+				data.setAddress(rs.getString("address"));
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			finally {
+				disconnect();
+			}
+			return data;
+		}
+		//환자 정보 업데이트
+		public int updateDB(String Privacy[]) {
+			connect();
+			String sql ="update patientuser set password=? where id=?";		
+			 
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, Privacy[0]);
+				pstmt.setString(2, Privacy[1]);
+				System.out.println(pstmt);
+				pstmt.executeUpdate();
+				return pstmt.executeUpdate(); // 수정되는 회원의 수인 1 반환
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			finally {
+				disconnect();
+			}
+			return -1;
 		}
 }

@@ -48,7 +48,7 @@ public class reserveDAO {
 		public int insertDB(reserveDTO reserveDTO) {
 			connect();
 					
-			String sql ="insert into reserve values (?, ?, ?, ?, ?, ?, ?, ?)";
+			String sql ="insert into reserve values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			
 			try {
 				pstmt = conn.prepareStatement(sql);
@@ -60,6 +60,7 @@ public class reserveDAO {
 				pstmt.setString(6,reserveDTO.getSymptom());
 				pstmt.setString(7,reserveDTO.getReserveDate());
 				pstmt.setString(8,reserveDTO.getNamepatient());
+				pstmt.setString(9,reserveDTO.getNamehospital());
 				System.out.println(pstmt);
 				return pstmt.executeUpdate(); // 추가되는 회원의 수인 1 반환
 			} catch (SQLException e) {
@@ -71,7 +72,7 @@ public class reserveDAO {
 			return -1; //회원 가입 실패
 		}
 		
-		// 전체 예약 출력 메소드
+		// 특정 병원 예약 출력 메소드
 		public ArrayList<reserveDTO> getDBList(String id) {
 			connect();
 			ArrayList<reserveDTO> datas = new ArrayList<reserveDTO>();
@@ -92,6 +93,40 @@ public class reserveDAO {
 					reserveDTO.setSymptom(rs.getString("symptom"));
 					reserveDTO.setReserveDate(rs.getString("reserveDate"));
 					reserveDTO.setNamepatient(rs.getString("namepatient"));
+					reserveDTO.setNamehospital(rs.getString("namehospital"));
+					datas.add(reserveDTO);
+				}
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			finally {
+				disconnect();
+			}
+			return datas;
+		}
+		// 환자 마이페이지 예약 출력 메소드
+		public ArrayList<reserveDTO> getMemDBList(String id) {
+			connect();
+			ArrayList<reserveDTO> datas = new ArrayList<reserveDTO>();
+							
+			String sql = "select * from reserve where Idpatient=?";
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1,id);
+				System.out.println(pstmt);
+				ResultSet rs = pstmt.executeQuery();
+				while(rs.next()) {
+					reserveDTO reserveDTO = new reserveDTO();
+					reserveDTO.setIdHospital(rs.getString("IdHospital"));
+					reserveDTO.setIdpatient(rs.getString("Idpatient"));
+					reserveDTO.setDepartment(rs.getString("department"));
+					reserveDTO.setReserveDiv(rs.getString("reserveDiv"));
+					reserveDTO.setRegistrationBackNumber(rs.getString("registrationBackNumber"));
+					reserveDTO.setSymptom(rs.getString("symptom"));
+					reserveDTO.setReserveDate(rs.getString("reserveDate"));
+					reserveDTO.setNamepatient(rs.getString("namepatient"));
+					reserveDTO.setNamehospital(rs.getString("namehospital"));
 					datas.add(reserveDTO);
 				}
 				rs.close();

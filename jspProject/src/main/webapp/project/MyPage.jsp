@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="java.util.*, jsp.member.model.*"%>
+<jsp:useBean id="datas" scope="request" class="java.util.ArrayList" />
+<% request.setCharacterEncoding("utf-8"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,28 +47,8 @@ crossorigin="anonymous"></script>
   	%>
   	<div class="container-fluid">
   	  <div class="row justify-content-start">
-			  <div class="d-flex flex-column flex-shrink-0 p-3 bg-light col-4" style="width: 280px; height: auto;">
-			    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-			      <span class="fs-4"><strong>마이페이지</strong></span>
-			    </a>
-			    <hr>
-			    <ul class="nav nav-pills flex-column mb-auto">
-			      <li class="nav-item">
-			        <a href="#" class="nav-link link-dark" aria-current="page">
-			          <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
-			          예약 확인
-			        </a>
-			      </li>
-			      <li>
-			        <a href="#" class="nav-link link-dark">
-			          <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
-			          개인정보 관리
-			        </a>
-			      </li>
-			    </ul>
-			    <hr>
-			  </div>
-		  	  <div class="col-md-8" style="white-space:nowrap;overflow:scroll;height:500px;">
+			  <jsp:include page="module/MypageSidebar.jsp" flush="false" />
+		  	  <div class="col-md-9" style="white-space:nowrap;overflow:scroll;height:500px;">
 		  	  	<table class="table table-hover" style="width:100%;">
 		      		<thead>
 		    			<tr>
@@ -77,6 +59,19 @@ crossorigin="anonymous"></script>
 					    </tr>
 					</thead>
 					<tbody>
+						<%
+							int i = 1;
+							for(reserveDTO rd : (ArrayList<reserveDTO>)datas) {
+						%>
+						    <tr>
+						      <th scope="row"><%= i++ %></th>
+						      <td><%= rd.getReserveDate() %></td>
+						      <td><%= rd.getNamehospital() %></td>
+						      <td><%= rd.getDepartment() %></td>
+						    </tr>
+						<%
+							}
+						%>
 		  			</tbody>
 		  		</table>
 		  	  </div>

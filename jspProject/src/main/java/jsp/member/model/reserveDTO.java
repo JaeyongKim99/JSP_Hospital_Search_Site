@@ -9,8 +9,15 @@ public class reserveDTO {
 	private String symptom; // 증상
 	private String reserveDate; //예약날짜
 	private String namepatient; //환자 이름
+	private String namehospital; //병원 이름
 	
 	
+	public String getNamehospital() {
+		return namehospital;
+	}
+	public void setNamehospital(String namehospital) {
+		this.namehospital = namehospital;
+	}
 	public String getNamepatient() {
 		return namepatient;
 	}
