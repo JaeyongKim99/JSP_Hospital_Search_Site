@@ -23,6 +23,7 @@
 1. 비회원 :   회원가입, 로그인,  서비스 소개, 이용안내
 2. 일반 사용자 :  회원가입, 로그인, 병원 검색 및 예약,  서비스 소개, 이용안내, 마이페이지
 3. 병원 사용자 :  회원가입, 로그인, 병원 예약 관리
+
 ![image](https://user-images.githubusercontent.com/111633448/207910373-276d9c59-ab0b-4ab4-8033-da48647b87e8.png)
 * 페이지 권한 구성도
 ![image](https://user-images.githubusercontent.com/111633448/207907969-aa2b631d-40b0-4a23-a721-74ed20f206af.png)
