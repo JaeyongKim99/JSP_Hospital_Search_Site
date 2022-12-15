@@ -64,9 +64,9 @@
 ![image](https://user-images.githubusercontent.com/111633448/207902451-0a8ec1b6-ee75-4018-a52e-24b67b98aff0.png)
 * 병원 로그인 페이지
 ![image](https://user-images.githubusercontent.com/111633448/207909744-07465716-cb5d-4c13-9bcd-a58569cd993d.png)
-* 병원명 검색
+* 병원명 검색(현재 위치에서 제일 가까운 위치부터 정렬되어 출력)
 ![image](https://user-images.githubusercontent.com/111633448/207909973-c4adbbbe-067c-4579-8a78-c19f68b9cf9c.png)
-* 진료과 검색
+* 진료과 검색(현재 위치에서 제일 가까운 위치부터 정렬되어 출력)
 ![image](https://user-images.githubusercontent.com/111633448/207909994-99456c17-66f3-402d-96c7-156652af0daa.png)
 * 예약 기능
 ![image](https://user-images.githubusercontent.com/111633448/207901848-314c9b79-2981-42d2-8043-d82bad891ed9.png)
