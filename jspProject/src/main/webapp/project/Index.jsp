@@ -54,15 +54,9 @@ function clickBtn(){
              
              var latInput = document.forms['searchBar']['lat'];
              var lngInput = document.forms['searchBar']['lng'];
-             console.log(latInput.value);
-             console.log(lngInput.value);
-             
              
              latInput.setAttribute('value',lat);
              lngInput.setAttribute('value',lng);
-             
-             console.log(latInput.value);
-             console.log(lngInput.value);
              
              document.getElementById('searchBar').submit();
 			},

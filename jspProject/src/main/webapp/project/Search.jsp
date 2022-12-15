@@ -14,6 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>메디닥</title>
 <!-- 스크립트 부분 -->
+<script src="apikey.js"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
 	integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
@@ -119,6 +120,9 @@ function clickBtn(){
 	name = (String)session.getAttribute("memName");
 	List<Map> pubList = new ArrayList();
 	pubList = (ArrayList)request.getAttribute("pubList");
+	//api키 가져오기
+	ResourceBundle resource = ResourceBundle.getBundle("apikey");
+	String covidApiKey = resource.getString("covidApiKey");
 %>
 <body>
 <% 
@@ -274,10 +278,11 @@ function clickBtn(){
 						})
 						function covidStat(addr) {
 						 	var covid_s;
+						 	const API_KEY = config.apikey;
 						 	const settings = {
 								  "async": false,
 								  "crossDomain": true,
-								  "url": "https://api.corona-19.kr/korea/country/new/?serviceKey=aFyobOp2lNAIsBTr8c4x1Ue5RMq6iDnZH",
+								  "url": "https://api.corona-19.kr/korea/country/new/?serviceKey="+ API_KEY,
 								  "method": "GET",
 								  "headers": {
 								    "Accept": "application/json"

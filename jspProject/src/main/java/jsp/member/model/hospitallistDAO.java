@@ -6,21 +6,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 public class hospitallistDAO {
 	Connection conn = null;
 	PreparedStatement pstmt = null;
 	
-    
+	//ip주소 가져오기
+	ResourceBundle resource = ResourceBundle.getBundle("apikey");
+	String ipAddress = resource.getString("ipAddress");
 	/* MySQL 연결정보 */
 	String jdbc_driver = "com.mysql.jdbc.Driver";
-	String jdbc_url = "jdbc:mysql://localhost:3306/medidak?useSSL=false&useUnicode=true&characterEncoding=utf-8"; 
+	String jdbc_url = "jdbc:mysql://"+ ipAddress + ":3306/medidak?useSSL=false&useUnicode=true&characterEncoding=utf-8"; 
 	
 	// DB연결 메서드
 	void connect() {
 		try {
 			Class.forName(jdbc_driver);
-			conn = DriverManager.getConnection(jdbc_url,"root","3548");
+			conn = DriverManager.getConnection(jdbc_url,"admin","3548");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

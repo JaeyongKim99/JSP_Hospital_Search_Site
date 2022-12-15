@@ -7,9 +7,10 @@
 <%@ page import = "java.util.ArrayList, java.util.HashMap, java.util.List, java.util.Map" %>
 <%@ page import = "javax.xml.parsers.DocumentBuilder, javax.xml.parsers.DocumentBuilderFactory, javax.xml.parsers.ParserConfigurationException"%>
 <%@ page import = "org.w3c.dom.Document, org.w3c.dom.Element, org.w3c.dom.Node, org.w3c.dom.NodeList, org.xml.sax.SAXException, org.xml.sax.*"%>
+<%@ page import = "java.util.ResourceBundle" %>
 <% request.setCharacterEncoding("utf-8"); %>
 <%@ page import="java.io.*, java.util.regex.Matcher, java.util.regex.Pattern"%>
-<jsp:useBean id="pud" class="jsp.member.model.patientuserDAO" />
+<jsp:useBean id="pud" class="jsp.member.model.patientuserDAO"/>
 <jsp:useBean id="addrmember" class="jsp.member.model.patientuserDTO" />
 <jsp:setProperty name="addrmember" property="*" />
 <jsp:useBean id="hud" class="jsp.member.model.hospitaluserDAO" />
@@ -29,6 +30,7 @@
 <jsp:setProperty property="namepatient" name="addrrd" value="<%=request.getParameter(\"namepatient\")%>"/>
 <jsp:setProperty property="namehospital" name="addrrd" value="<%=request.getParameter(\"namehospital\")%>"/>
 <%
+
 //컨트롤러 요청 파라메터
 String action = request.getParameter("action"); // 개인 회원 열람 컨트롤러
 String hosAction = request.getParameter("hosAction"); // 기업 회원 열람 컨트롤러
@@ -492,7 +494,7 @@ if ("search".equals(hoslAction)) {
 		String keyword = request.getParameter("keyword");// 검색어
 		String lat = request.getParameter("lat");//위도
 		String lng = request.getParameter("lng");//경도
-		//System.out.println(lat + " , " + lng); //경도 위도 출력
+		System.out.println(lat + " , " + lng); //경도 위도 출력
 		String location = getLocation(lat, lng);
 		// XML 문서 파싱
 		 String xml = location;// String으로 만든 xml 파일을 가져옴
@@ -512,20 +514,27 @@ if ("search".equals(hoslAction)) {
                 	 continue;
                  } // 현재 위치에서 1키로 이내에 있는 병원만 검색
                  
-                 hospitallistDTO hosldata = hosl.getDBList(getValue("hpid", element));
-                 hosdepartmentDTO hosmdata = hosm.getDBList(getValue("hpid", element));
-                 String[] basicList = {hosmdata.getDgidIdName(), hosldata.getPostCdn1(), hosldata.getPostCdn2(), hosldata.getDutyAddr(), hosldata.getWgs84Lon(), hosldata.getWgs84Lat()};
-             	 
+                 String DgidIdName =null;
                  
+             	 
                  if(search.equals("hosname")){ // 검색 분류에 따라 다르게 검색
                 	 if(!(getValue("dutyName", element).contains(keyword))){
                     	 continue;
                      } // 병원명으로 검색
+                	 else{
+                		 hosdepartmentDTO hosmdata = hosm.getDBList(getValue("hpid", element));
+                		 DgidIdName = hosmdata.getDgidIdName();
+                	 }
                  }else if(search.equals("department")){
-                	 if(!(basicList[0]).contains(keyword)){
+                	 hosdepartmentDTO hosmdata = hosm.getDBList(getValue("hpid", element));
+                	 DgidIdName = hosmdata.getDgidIdName();
+                	 if(!(DgidIdName).contains(keyword)){
                     	 continue;
                      } // 진료과로 검색
                  }
+                 
+                 hospitallistDTO hosldata = hosl.getDBList(getValue("hpid", element));
+                 String[] basicList = {DgidIdName, hosldata.getPostCdn1(), hosldata.getPostCdn2(), hosldata.getDutyAddr(), hosldata.getWgs84Lon(), hosldata.getWgs84Lat()};
                  Map<String, String> pub = new HashMap();
              	 pub.put("dutyName", getValue("dutyName", element));
              	 pub.put("dutyTel1", getValue("dutyTel1", element));
@@ -540,6 +549,7 @@ if ("search".equals(hoslAction)) {
          }
          for(Map pub : pubList){
         	 System.out.println(pub.get("dutyName"));
+        	 System.out.println(pub.get("hpid"));
         	 System.out.println(pub.get("dutyTel1"));
         	 System.out.println(pub.get("dgidIdName"));
          }
@@ -564,9 +574,12 @@ private static String getValue(String tag, Element element) {
 
 private static String getLocation(String lat, String lng) {
 	String location = "";
+	//api키 가져오기
+	ResourceBundle resource = ResourceBundle.getBundle("apikey");
+	String dataApiKey = resource.getString("dataApiKey");
 	try{
 		StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B552657/HsptlAsembySearchService/getHsptlMdcncLcinfoInqire"); /*URL*/
-		 urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=x54Q8qIcHnEvwPqRil6XXkjUp2H9AzWuMgC8onIYs1CyUpBTOfUo7fYH540P3kHb0dUUgt%2FQEAo%2B1BfEWmKTsw%3D%3D"); /*Service Key*/
+		 urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + dataApiKey); /*Service Key*/
 		 urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
 		 urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("1000", "UTF-8")); /*한 페이지 결과 수*/
 		 urlBuilder.append("&" + URLEncoder.encode("WGS84_LON","UTF-8") + "=" + URLEncoder.encode(lng, "UTF-8")); /*병원경도*/
